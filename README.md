@@ -266,18 +266,212 @@ void main() {
 }
 ```
 
+## 2.2 String interpolation
+
+String interpolation는 text에 변수를 추가하는 방법임.  
+String interpolation를 사용할땐 " $ "를 써주고 뒤에 추가할 변수 이름을 작성해준다.
+```dart
+void main() {
+    var name = 'nico';
+    var greeting = 'Hello everyone, my name is $name';
+}
+```
+이렇게 작성해주면 "Hello everyone, my name is nico"가 출력된다.
+그냥 text를 추가하는건 이렇게 작성해주면 됨.  
+근데 계산을 해야하는 상황이 생긴다면 아래 코드처럼 작성해 주면됨.
+
+```dart
+void main() {
+    var name = 'nico';
+    var age = 10;
+    var greeting = 'Hello everyone, my name is $name and I\'m ${age + 2}';
+}
+```
+그냥 $뒤에 중괄호쓰고 괄호안에 수식을 적으면 끝남.
+위 코드에서 오류가 하나 있는데 바로 I'm때문에 오류가 나는거임.
+왜냐하면 텍스트 시작을 작은 따옴표로 했는데 I'm에 작은 따옴표가 있기때문에 dart에서 I'm에서 문장이 끝낫다고 생각하기때문임.  
+이 오류를 고치려면 I'm대신 I\'m을 써주면된다.
+
+## 2.3 Collection for
+
+```dart
+void main() {
+    var oldFriends = ['nico', 'lynn'];
+    var newFriends = [
+        'lewis', 
+        'ralph', 
+        'darren',
+        for(var friend in oldFriends) "❤️ $friend";
+    ]
+}
+```
+이렇게 작성한후 newFrien를 출력하면 newFriend라는 리스트안에 있는 요소들을 출력한후에 oldFriends의 요소들앞에 ❤️가 붙어서 나온다.
+
+## 2.4 Maps
+
+```dart
+void main() {
+    var player = {
+        'name' : nico,
+        'xp' : 19.99,
+        'superpower' : false,
+    };
+}
+```
+map은 위에있는 코드와 같이  
+'key' : value 
+이렇게 작성해주면 된다. 
+설명에 들어가기전에 object에 대해 설명하자면
+object는 쉽게말해 모든 데이터타입이 될수있는걸 말함.
+string이 될수도있고 int가 될수도 있고 bool이 될수도 있음 
+
+값이 비어있는 Map도 만들어줄수 있는데 예를 들면
+```dart
+void main() {
+    Map<int, bool> player = {
+        1: true,
+        2: false.
+    };
+}
+```
+이렇게 작성을 할수 있는데 var대신 map을 적어주고 <>괄호안에 자신이 원하는 key의 데이터 타입, 원하는 value의 데이터타입을 적어주면 된다. 이렇게 적으면 key는 int, value는 bool인 데이터타입 밖에 넣을수없다.
+
+## 2.5 sets
+set은 list와 map을 짬뽕시켜놓은 느낌이 조금 있음.
+```dart
+void main() {
+    Set<int> numbers = {1, 2, 3, 4};
+}
+```
+set과 List의 차이는 set에 속한 요소들은 희귀한거임.
+이게 무슨 말이냐면
+list에선 add 메소드로 똑같은 요소를 여러번 추가해도 list안에 들어가지만 set은 그게아님.  
+set에서 add 메소드로 똑같은 요소를 여러번 추가해도 set안에 추가되지않음.
+
+요소가 항상 하나씩만 있어야 되면 set을 사용하고
+여러개있어도 상관없다면 list를 사용하면 됨.
+
+## 3.0 defining a function
+
+일단 설명에 앞서 간단한게 function을 만들고 설명함.
+```dart
+void sayHello(String name) {
+    print("Hello $name nice to meet you");
+}
+
+void main() {
+    print(sayHello('nico'));
+}
+```
+위에있는 코드처럼 sayHello라는 함수를 만들었는데  
+void는 이 함수가 아무것도 반환하지 않는다는 의미임.
+만약 이 함수에서 string을 반환하고 싶다면 아래처럼 작성해주면 된다.
+```dart
+String sayHello(String name) {
+    return "Hello $name nice to meet you";
+}
+
+void main() {
+    print(sayHello('nico'));
+}
+```
+이렇게 하면 이 함수는 string을 반환하게 된다.  
+이렇게 작성하는 방법말고 다른 방법도 있는데 바로 화살표를 이용하면된다.
+
+```dart
+String sayHello(String name) => "Hello $name nice to meet you";
+
+void main() {
+    print(sayHello('nico'));
+}
+```
+이렇게 작성하면 된다.  
+함수에 포함된 코드가 여러줄이면 첫번째 방법대로 사용하면되고
+한줄짜리 함수라면 두번째 방법을 사용하면 된다.
+
+## 3.1 named parameters
+
+이번엔 방금처럼 함수를 만들고 한개의 값이아닌 여러개의 값을 반환하는 함수를 만들어볼것임.
+
+```dart
+String sayHello(String name, int age, String country) {
+    return "Hello $name, yout are $age, ande you come from $country";
+};
+
+void main() {
+    print(sayHello('nico', 20, 'USA'));
+}
+```
+대충 이렇게 작성하면 되지만 그렇게 좋은 코드는 아님 왜냐하면
+사용자가 sayHell의 순서도 모를수있고 20이 무슨뜻인지 USA가 무슨뜻인지 모를수도 있기 때문임. 
+
+그래서 우리는 
+```dart
+String sayHello({String name, int age, String country}) {
+    return "Hello $name, yout are $age, ande you come from $country";
+};
+
+void main() {
+    print(sayHello(
+        age : 12,
+        country : 'cuba',
+        name : 'nico',
+    ));
+}
+```
+첫번째 코드에선 순서를 다 기억해서 작성해야 했다면 위에보이는 코드는 순서와 상관없이 (변수이름: 값)으로 작성해주고, 함수에서 변수들을 중괄호 묶어주면 된다. 하지만 이렇게 해도 오류가 뜨는데 그 이유는 dart에서 변수의 값이 null이면 어떡하지라는 걱정을 해주고있는거다. 여기서 dart가 하는 말은 만약 사용자가 country,name을 입력해주지 않는다면 어떡하지라고 말하는거다. 이럴땐 두가지의 방법이 있는데
+
+첫번째 방법은 함수를 생성할때 변수에 디폴트값을 줘버리는것이다. 그럼 사용자가 변수에 값을 넣어주지않아도 디폴트값이 있기때문에 상관없기 때문이다. 어떻게 작성하냐면
+```dart
+String sayHello({String name = 'nana', int age = 12, String country = 'cuda'}) {
+    return "Hello $name, yout are $age, ande you come from $country";
+};
+
+void main() {
+    print(sayHello());
+}
+```
+이렇게 작성해주면 오류가 안난다
+
+두번쨰 방법은 required를 이용해서 사용자가 변수들의 값을 모두 입력하게 만드는것이다. 작성하는 방법은
+```dart
+String sayHello({ required String name, required int age, required String country}) {
+    return "Hello $name, yout are $age, ande you come from $country";
+};
+
+void main() {
+    print(sayHello(
+        age : 12,
+        country : 'cuba',
+        name : 'nico',
+    ));
+}
+```
+이렇게 작성해주면 된다.
+
+## Recap
+복습하는 거구연~
+
+## 3.3 optional positional parameters
+```dart
+String sayHello(String name, int age, String country) => "Hello $name, yout are $age, ande you come from $country";
 
 
+void main() {
+    print(sayHello('nico', 20, 'USA'));
+}
+```
+이 코드에선 모든 변수가 required이다. 하지만 name argument를 사용하지않고 country만 required하지 않게 하려면 어떻게 해야할까?
 
+```dart
+String sayHello(
+    String name, 
+    int age, 
+    [String? country = 'cuba']) => 
+        "Hello $name, yout are $age, ande you come from $country";
 
-
-
-
-
-
-
-
-
-
-
-
+void main() {
+    print(sayHello('nico', 20));
+}
+```
+이렇게 함수에서 데이터 타입과 변수명을 대괄호로 묶고 디폴트값을 주고 not requird이라는 뜻인 "?"를 데이터타입 뒤에 적어주면 변수를 required하지 않고도 함수를 호출할수잇다.
