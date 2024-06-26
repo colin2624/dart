@@ -475,3 +475,456 @@ void main() {
 }
 ```
 이렇게 함수에서 데이터 타입과 변수명을 대괄호로 묶고 디폴트값을 주고 not requird이라는 뜻인 "?"를 데이터타입 뒤에 적어주면 변수를 required하지 않고도 함수를 호출할수잇다.
+
+## 3.4 QQ Operator
+
+```dart
+String capitalizeName(String name) => name.toUpperCase();
+
+void main() {
+    capitalizeName('nico');
+}
+```
+위 함수에서 사용자가 null도 입력할수 있도록 만들어보도록하자 
+
+```dart
+String capitalizeName(String? name) {
+    if (name != null) {
+        return name.toUpperCase();
+    }
+    return 'ANON';
+}
+
+void main() {
+    capitalizeName('nico');
+}
+```
+이렇게 작성해주면 name의 값이 null이 아닐때만 toUpperCase 메소드를 사용하라는 뜻이다.  
+이 코드를 조금 더 짧게 작성해줄수 있는데
+
+```dart
+String capitalizeName(String? name) => name != null ? name.toUpperCase() : 'ANON';
+
+void main() {
+    capitalizeName('nico');
+}
+```
+이렇게 작성해주면 된다. 심지어는 더 짧게 적어줄수도 있는데 더 짧게 줄이기전에 QQ연산자에 대해 알아보고 가도록하자.  
+QQ연산자는 좌항과 우항이 있는데 만역 좌황이 null값이라면 우항을 반환하는 거임.
+
+```dart
+String capitalizeName(String? name) => name?.toUpperCase() ?? 'ANON';
+
+void main() {
+    capitalizeName('nico');
+}
+```
+이렇게 작성해주면 qq연산자를 잘 사용한거다.  
+다음 강의로 넘어가기 전에 QQ equals --> "??="를 배우고 가자
+
+```dart
+void main() {
+    String? name;
+    name ??= 'nico';
+}
+```
+사실 이것도 QQ연산자랑 별 다른거없긴한데 그냥 좀 간단하다? 코드도 똑같이 해석하면된다.
+만약 name의 값이 null이라면 nico를 반환한다는 거임.
+
+## 3.5 typedef
+
+typedef는 자료형이 헷갈리 떄 도움이 될 alias을 만드는 방법임.  
+일단 function을 하나 만들어보자
+
+```dart
+List<int> recerseListOfNumbers(List<int> list) {
+    var recersed = list.reversed;
+    return reersed.toList();
+
+    void main() {
+
+    }
+}
+```
+typedef는 함수 이름앞에 있는 데이터 타입을 다른 변수로 바꿔줄수있음.
+```dart
+typedef ListOf = List<int>;
+
+ListOf recerseListOfNumbers(List<int> list) {
+    var recersed = list.reversed;
+    return reersed.toList();
+
+    void main() {
+
+    }
+}
+```
+이렇게 작성해주면 똑같은 Int형 함수이지만 더 파악하기 쉬움.
+typedef는 원하는 만큼 생성할수 있음.  
+만약 mapdml typedef를 만들고 싶다면 아래와 같이 작성해주면 됨.
+일단 인사를하는 함수를 하나 만들어보자.
+
+```dart
+Srting sayHi(Map<String, String> userInfo) {
+    return "Hi ${userInfo['name']}"
+}
+
+void main() {
+
+}
+```
+이 코드에서 typedef를 사용하고 싶다면
+```dart
+typedef UserInfo = Map<String, String>;
+
+Srting sayHi(UserInfo userInfo) {
+    return "Hi ${userInfo['name']}"
+}
+
+void main() {
+
+}
+```
+이렇게 작성해줘도 되긴하지만 구조화된 data의 형태를 지정하고 싶다면 class를 만들어줘야하는데  
+class는 다음강의에서 알아보도록하자.
+
+## your first dart class
+
+드디어 class에 대해 배워보자.  
+function을 만들땐 var를 사용해서 변수를 선언해도 상관없었지만  
+class에선 꼭 데이터 타입을 지정해줘야함.
+
+```dart
+class Player {
+    String name = 'nico';
+    int xp = 1500;
+}
+
+void main() {
+    var player = Player();
+}
+```
+이렇게 작성해주면 Player라는 class에서 생성한 인스턴스들을 사용할수 있게된다.  
+출력할때는 "print(player.클래스에서 생성한 인스턴스)"이렇게 출력해주면되고  
+값을 업데이트 하고싶다면 (player.인스턴스 = 수정하고싶은 값)으로 작성해주면 된다  
+이제 class안에 인사를 할수있는 메소드를 만들어보자
+```dart
+class Player {
+    final String name = 'nico';
+    int xp = 1500;
+
+    void sayHello() {
+        print("Hi my name is $name");
+    }
+}
+
+void main() {
+    var player = Player("nico", 1500);
+}
+```
+이렇게 작성해주면 된다.
+
+## 4.1 Constructors
+
+4.0에서 작성한 클래스는 모든 player의 이름과 xp가 같아서 좀 재미가 없음.  
+그래서 우리는 player들마다 값이 다르게 만들어볼거임 
+```dart
+class Player {
+    final String name;
+    int xp;
+
+    Player(String name, int xp) {
+        this.name = name;
+        this.xp = xp;
+    }
+
+    void sayHello() {
+        print("Hi my name is $name");
+    }
+}
+
+void main() {
+    var player = Player("nico", 1500);
+}
+```
+일단 이렇게 작성해주게 되면 오류가 하나뜰거임 왜냐하면 우리가 Player class에서 name을 final로 선언했기 때문에
+dart가 값을 달라고 응애응애하는거다. 이제 드디어 late 수식어를 써주면 된다. 
+
+## 4.2 Named constructor Parmeters
+
+```dart
+class Player {
+    final String name;
+    int xp;
+    String team;
+    int age;
+
+    Player(this.name, this.xp, this.team, this.age);
+
+    void sayHello() {
+        print("Hi my name is $name");
+    }
+}
+
+void main() {
+    var player = Player("nico", 1500, "mom", 12);
+}
+```
+이렇게 작성을 해도 괜찮지만 나중에 class의 규모가 커지면 통제하기 어려워 질수 있다.  
+위 코드에서 변수의 값이 어느위치에 있어야하는지 어디에도 나와있지않아서 추후에 헷갈릴수있다.  
+그냥 함수에서 했던것처럼 중괄호넣고 초기화시켜주면 됨.
+```dart
+class Player {
+    final String name;
+    int xp;
+    String team;
+    int age;
+
+    Player({this.name, this.xp, this.team, this.age});
+
+    void sayHello() {
+        print("Hi my name is $name");
+    }
+}
+
+void main() {
+    var player = Player(
+        name: "nico",
+        xp: 1200,
+        team: "mom",
+        age: 12,
+    );
+}
+```
+이렇게만 적으면 오류가 뜰수있으니 required를 붙여주도록하자
+```dart
+class Player {
+    final String name;
+    int xp;
+    String team;
+    int age;
+
+    Player({
+        required this.name, 
+        required this.xp, 
+        required this.team, 
+        required this.age
+    });
+
+    void sayHello() {
+        print("Hi my name is $name");
+    }
+}
+
+void main() {
+    var player = Player(
+        name: "nico",
+        xp: 1200,
+        team: "mom",
+        age: 12,
+    );
+}
+```
+이렇게 적어주면 됨
+
+## 4.3 named Constructors
+
+전 강의에서 배운 named Constructor 파라미터 어쩌고 저쩌고는 클래스를 호출할때마다 기본으로 호출되는 constructor임.  
+```dart
+class Player {
+    final String name;
+    int xp, age;
+    String team;
+
+    Player({
+        required this.name, 
+        required this.xp, 
+        required this.team, 
+        required this.age
+    });
+
+    Player.createBluePlayer({
+        required String name, 
+        required int age
+    }) :    this.age = age,
+            this.name = name,
+            this.team = 'blue',
+            this.xp = 0;
+
+    void sayHello() {
+        print("Hi my name is $name");
+    }
+}
+
+void main() {
+    var player = Player.createBluePlayer(
+        name: "nico",
+        xp: 1200,
+    );
+
+    var redplayer = Player.createRedPlayer(
+        name: "nlnl",
+        xp: 1500,
+    );
+}
+```
+이렇게 작성해주면 Player.createBluePlayer이라는 constructor을 실행하고 값을 저장한후에 초기화시키는 코드이다.
+
+## 4.5 cascade Notation
+```dart
+class Player {
+    final String name;
+    int xp;
+    String team;
+    int age;
+
+    Player({
+        required this.name, 
+        required this.xp, 
+        required this.team, 
+        required this.age
+    });
+
+    void sayHello() {
+        print("Hi my name is $name");
+    }
+}
+
+void main() {
+    var player = Player(
+        name: "nico",
+        xp: 1200,
+        team: "mom",
+        age: 12,
+    );
+}
+```
+이렇게 적어주면 됨
+
+## 4.3 named Constructors
+떄로는 문법에 멋진 설탕을 추가하는것이 우리삶을 굉장히 편하게 해준다고 한다.
+```dart
+class Player {
+    final String name;
+    int xp, age;
+    String team;
+
+    Player({
+        required this.name, 
+        required this.xp, 
+        required this.team
+    });
+
+    void sayHello() {
+        print("Hi my name is $name");
+    }
+}
+
+void main() {
+    var player = Player(
+        name: "nico",
+        xp: 1200,
+        team: 'red'
+    );
+}
+```
+이 코드에서 만약 값을 변경하고 싶다면
+```dart
+class Player {
+    final String name;
+    int xp, age;
+    String team;
+
+    Player({
+        required this.name, 
+        required this.xp, 
+        required this.team
+    });
+
+    void sayHello() {
+        print("Hi my name is $name");
+    }
+}
+
+void main() {
+    var player = Player(name: "nico", xp: 1200, team: 'red')
+    ..name = 'klas'
+    ..xp = 120000
+    ..team = 'blue';
+}
+```
+이렇게 작성해주면 된다. 물론 하나하나 변경해줘도 되지만 이게더 훨씬 편하다.
+
+## 4.6 Enums
+
+Enums는 우리가 바보같은 실수들을 안 만들게끔 도와줌.  
+Enums는 우리가 오타를 치는것을 방지해줌
+
+Eunms를 선언할땐
+```dart
+Enum Team {red, blue}
+```
+이렇게 써줄수 있는데 이렇게 써주면 나중에 team 변수안에 값을 red,blue밖에 넣을수 없음.  
+호출할땐 값을 넣어줄땐 team: Team.red 아니면 Team.blue라고 적어주면된다.
+호출할떄도 똑같이 해주면 됨.
+
+## Avstract Classes 
+
+이번엔 추상화 클래스에 대해 배워보도록 할건데 일단 추상화 클래스로는 객체를 생성할수 없음.  
+추상화 클래스는 다른 클래스들이 직접 구현해야하는 메소드들을 모아 놓은 일종의 청사진이라고 보면됨.  
+
+예를 들면
+```dart
+abstract class Human {
+    void walk();
+}
+```
+그냥 이정도로만 작성하면됨.  
+Human이라는 추상화 클래스는 walk라는 메소드를 가지고 walk이라는 메소드는 void를 반환해야함.  
+
+## inheritance 
+
+플러터에서 가끔사용하지만 아주 중요한 개념.  
+이전 강의에서 배운 extend(확장)을하고 코드를 작성할 떄 super이라는 키워드를 통해서 부모클래스와 자식클래스끼리 상호작용 할수 있게 도와줌.  
+
+## mixins
+
+mixins은 생성자가 없을 클래스를 뜻함.  
+mixins는 클래스에 프로퍼티들을 추가하거나 할 떄 사용함. 
+mixins 클래스들을 하나의 클래스에 단 한버만 사용할것같으면 의미가없음. 
+extend는 한번밖에 사용하지 못했다면 mixins는 여러번 재사용이 가능함.
+```dart
+class Strong {
+    final double strenghtLevel = 1500.99;
+}
+
+class QuickTunner {
+    void runQuick() {
+        print("runnnn");
+    }
+}
+
+class Tall {
+    final double height = 1.99;
+}
+
+enum Team {blue, red}
+
+class Player with Strong, QucikRunner, Tall {
+    final Team team;
+} 
+
+class Horse with Strong, QuickTunner{}
+
+class Kid with QuickRunnner {}
+
+void main() {
+    var player = Player(
+        team: Team.red,
+    ):
+}
+```
+
+## Conclusions
+
+"끝났음 ㅋ fultter 공부하러 가셈 ㅋㅋ" -니꼴라스-
